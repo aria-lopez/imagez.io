@@ -39,7 +39,7 @@ const Text = styled.h1`
 export default function Compressor() {
     return (
         <UploadContainer>
-           <Text>Upload your file(s) here</Text>
+           <Text>Upload your image(s) here</Text>
             <Label>
                 <Input type="file" multiple accept="image/*" />
             </Label>
