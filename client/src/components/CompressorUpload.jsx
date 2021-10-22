@@ -1,4 +1,4 @@
-import React, { useState, ueEffect } from 'react';
+import React, { useState, useEffect } from 'react';
 import styled from 'styled-components';
 
 const UploadContainer = styled.div`
@@ -36,12 +36,25 @@ const Text = styled.h1`
     cursor: pointer;
 `;
 
-export default function Compressor() {
+export default function Compressor({ onImageChange, images }) {
+    const [imagePreviews, setImagePreviews] = useState([]);
+    useEffect(() => {
+        if (images.length === 0) return; 
+        const imageUrls = [];
+        images.forEach(image => {
+            imageUrls.push(URL.createObjectURL(image));
+        });
+        setImagePreviews(imageUrls);
+    }, [images]);
+
+    useEffect(() => {
+        console.log(imagePreviews);
+    }, [imagePreviews])
     return (
         <UploadContainer>
            <Text>Upload your image(s) here</Text>
             <Label>
-                <Input type="file" multiple accept="image/*" />
+                <Input type="file" multiple accept="image/*" onChange={onImageChange} />
             </Label>
         </UploadContainer>
     );

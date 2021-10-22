@@ -29,13 +29,17 @@ const Button = styled.div`
 
 const ButtonText = styled.h1``;
 
-export default function CompressorButtons() {
+export default function CompressorButtons({ onUpload, images }) {
     
-    const [filesSelected, setFilesSelected] = useState(false);
+    const [filesSelected, setFilesSelected] = useState(null);
+    
+    useEffect(() => {
+        images.length > 0 ? setFilesSelected(true) : setFilesSelected(false);
+    }, [images]);
 
     return (
         <Container>
-            <Button active={filesSelected}>
+            <Button active={filesSelected} onClick={(e) => onUpload(e)}>
                 <ButtonText>
                 { filesSelected ? 'Click here to begin compression' : 'Upload files above before compressing' }
                 </ButtonText>
