@@ -19,16 +19,16 @@ const Title = styled.p`
 const SubTitle = styled.p`
     font-size: 20px;
     font-weight: 400;
-    margin: 0;
+    margin: 0px 0px 50px 0px;
     padding: 0;
-    color: #5c5e63;
+    color: #919191;
 `;
 
 export default function Header() {
     return (
         <Container>
             <Title>imagez.io</Title>  
-            <SubTitle>Simple image compressor</SubTitle>
+            <SubTitle>Simple Image Compressor</SubTitle>
         </Container>
     );
 }
