@@ -18,9 +18,12 @@ const Container = styled.div`
 
 export default function Compressor() {
     const [images, setImages] = useState([]);
+    const [errorMsg, setErrorMsg] = useState('');
     
     function onImageChange(e) {
+        if (e.target.files.length > 10) return setErrorMsg('You cant upload more than 10 files, please try again.');
         setImages([...e.target.files]);
+        setErrorMsg('');
     }
 
     function onUpload(e) {
@@ -37,7 +40,7 @@ export default function Compressor() {
 
     return (
         <Container>
-            <CompressorUpload onImageChange={onImageChange} images={images} />
+            <CompressorUpload onImageChange={onImageChange} images={images} errorMsg={errorMsg} />
             <CompressorButtons onUpload={onUpload} images={images} />
         </Container>
     );

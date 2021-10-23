@@ -2,7 +2,11 @@ import React, { useState, useEffect } from 'react';
 import styled from 'styled-components';
 
 const UploadContainer = styled.div`
+    display: flex;
+    flex-direction: row;
     min-width: 100%;
+    max-width: 100%;
+    flex-wrap: wrap;
     margin: 0px;
     height: 60%;
     border-bottom: 2px solid #919191;
@@ -11,7 +15,7 @@ const UploadContainer = styled.div`
     transition-duration: 0.2s;
     cursor: pointer;
     &:hover {
-        background-color: #0fd9a3;
+        background-color: ${props => props.active ? '#5a6e68' : '#0fd9a3' };
     }
 `;
 
@@ -36,8 +40,22 @@ const Text = styled.h1`
     cursor: pointer;
 `;
 
-export default function Compressor({ onImageChange, images }) {
+const Image = styled.img`
+    max-height: 100px;
+    width: auto;
+`;
+
+const Error = styled.h2`
+    position: absolute;
+    right: 38%;
+    top: 30%;
+    color: #f25c78;
+`;
+
+export default function CompressorUpload({ onImageChange, images, errorMsg}) {
     const [imagePreviews, setImagePreviews] = useState([]);
+    const [displayImages, setDisplayImages] = useState(false);
+
     useEffect(() => {
         if (images.length === 0) return; 
         const imageUrls = [];
@@ -45,17 +63,29 @@ export default function Compressor({ onImageChange, images }) {
             imageUrls.push(URL.createObjectURL(image));
         });
         setImagePreviews(imageUrls);
+        setDisplayImages(true);
     }, [images]);
 
     useEffect(() => {
         console.log(imagePreviews);
-    }, [imagePreviews])
-    return (
-        <UploadContainer>
+    }, [imagePreviews]);
+
+    const UploadDisplay = (
+        <>
            <Text>Upload your image(s) here</Text>
             <Label>
                 <Input type="file" multiple accept="image/*" onChange={onImageChange} />
             </Label>
+        </>
+    );
+
+    return (
+        <UploadContainer active={displayImages}>
+            { errorMsg !== '' ? <Error>{errorMsg}</Error> : null }
+            { displayImages 
+                ? imagePreviews.map(imageUrl => <Image src={imageUrl} />)
+                : UploadDisplay
+            }
         </UploadContainer>
     );
 }
