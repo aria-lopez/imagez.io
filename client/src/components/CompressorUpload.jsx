@@ -40,6 +40,12 @@ const Text = styled.h1`
     cursor: pointer;
 `;
 
+
+const ImageContainer = styled.div`
+    max-height: 80%;
+    overflow-x: hidden;
+`;
+
 const Image = styled.img`
     max-height: 100px;
     width: auto;
@@ -98,7 +104,11 @@ export default function CompressorUpload({ onImageChange, images, errorMsg, clea
         <UploadContainer active={displayImages}>
             { errorMsg !== '' ? <Error>{errorMsg}</Error> : null }
             { displayImages 
-                ? imagePreviews.map(imageUrl => <Image src={imageUrl} />)
+                ?   (
+                        <ImageContainer>
+                            { imagePreviews.map((imageUrl) => (<Image src={imageUrl} />)) }
+                        </ImageContainer>
+                    )
                 : UploadDisplay
             }
             { displayImages ? <ClearImagesBtn onClick={() => clearImages()}>Clear Images</ClearImagesBtn> : null }
