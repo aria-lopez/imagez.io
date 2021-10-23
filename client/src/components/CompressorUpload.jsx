@@ -52,12 +52,31 @@ const Error = styled.h2`
     color: #f25c78;
 `;
 
-export default function CompressorUpload({ onImageChange, images, errorMsg}) {
+const ClearImagesBtn = styled.button`
+    background-color: #a3394d;
+    transition-duration: 0.2s;
+    color: inherit;
+    font-family: inherit;
+    min-width: 100%;
+    min-height: 10%;
+    font-size: 24px;
+    border: transparent;
+    cursor: pointer;
+    &:hover {
+        background-color: #f25c78;
+    }
+`;
+
+export default function CompressorUpload({ onImageChange, images, errorMsg, clearImages}) {
     const [imagePreviews, setImagePreviews] = useState([]);
     const [displayImages, setDisplayImages] = useState(false);
 
     useEffect(() => {
-        if (images.length === 0) return; 
+        if (images.length === 0) {
+            setDisplayImages(false);
+            setImagePreviews([]);
+            return
+        }; 
         const imageUrls = [];
         images.forEach(image => {
             imageUrls.push(URL.createObjectURL(image));
@@ -65,10 +84,6 @@ export default function CompressorUpload({ onImageChange, images, errorMsg}) {
         setImagePreviews(imageUrls);
         setDisplayImages(true);
     }, [images]);
-
-    useEffect(() => {
-        console.log(imagePreviews);
-    }, [imagePreviews]);
 
     const UploadDisplay = (
         <>
@@ -86,6 +101,7 @@ export default function CompressorUpload({ onImageChange, images, errorMsg}) {
                 ? imagePreviews.map(imageUrl => <Image src={imageUrl} />)
                 : UploadDisplay
             }
+            { displayImages ? <ClearImagesBtn onClick={() => clearImages()}>Clear Images</ClearImagesBtn> : null }
         </UploadContainer>
     );
 }

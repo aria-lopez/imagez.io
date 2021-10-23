@@ -10,7 +10,7 @@ const Container = styled.div`
     align-items: flex-start;
     width: 800px;
     height: 500px;
-    border: 1.5px solid #0fd9a3;
+    border: 2px solid whitesmoke;
     border-radius: 5px;
     box-shadow: 0px 0px 30px #0fd9a3;
     padding: 0;
@@ -38,9 +38,14 @@ export default function Compressor() {
         // Axios post here
     }
 
+    function clearImages() {
+        setImages([]);
+        setErrorMsg('');
+    }
+
     return (
         <Container>
-            <CompressorUpload onImageChange={onImageChange} images={images} errorMsg={errorMsg} />
+            <CompressorUpload onImageChange={onImageChange} images={images} errorMsg={errorMsg} clearImages={clearImages} />
             <CompressorButtons onUpload={onUpload} images={images} />
         </Container>
     );
