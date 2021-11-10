@@ -29,13 +29,16 @@ export default function Compressor() {
     function onUpload(e) {
         e.preventDefault();
         
-        let formData = new FormData();
-        
-        for (const key of Object.keys(images)) {
-            formData.append('images', images[key]);
+        const form = new FormData();
+        for (const singleFile of images) {
+            form.append('images', singleFile);
         }
         
-        // Axios post here
+        axios.post('/api/upload', form, {})
+            .then(({ data }) => {
+                console.log(data);
+            })
+            .catch(err => console.log(err));
     }
 
     function clearImages() {
