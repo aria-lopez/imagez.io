@@ -54,17 +54,23 @@ module.exports = {
     handleImageDeletion: async (req, res) => {
         try {
             const { imageRefs } = req.body;
+            const deleteImageStack = async (imageRefs) => {
+                try {
+                    if (imageRefs.length === 0) return;
+                    const ref = imageRefs.shift();
+                    await S3.deleteObject({
+                        Bucket: 'imagez-storage',
+                        Key: ref,
+                    }).promise();
+
+                    return await deleteImageStack(imageRefs);
+                } catch(e) {
+                    console.log(e);
+                    throw new Error(e);
+                }
+            }
             
-            imageRefs.forEach(ref => {
-                S3.deleteObject({
-                    Bucket: 'imagez-storage',
-                    Key: ref,
-                }, (err) => { 
-                    if (err) {
-                        console.log(err);
-                    }
-                })
-            });
+            await deleteImageStack(imageRefs);
 
             res.sendStatus(201);
 
