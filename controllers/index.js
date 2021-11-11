@@ -40,7 +40,30 @@ module.exports = {
             res.status(201).json(compressedImageLinks);
         } catch(e) {
             console.log(e);
-            res.sendStatus(500);
+            res.status(500).json(e);
+        }
+    },
+
+    handleImageDeletion: async (req, res) => {
+        try {
+            const { imageRefs } = req.body;
+            
+            imageRefs.forEach(ref => {
+                S3.deleteObject({
+                    Bucket: 'imagez-storage',
+                    Key: ref,
+                }, (err) => { 
+                    if (err) {
+                        console.log(err);
+                    }
+                })
+            });
+
+            res.sendStatus(201);
+
+        } catch (e) {
+            console.log(e);
+            res.status(500).json(e);
         }
     }
 }
