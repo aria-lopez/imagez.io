@@ -29,21 +29,48 @@ const Button = styled.div`
 
 const ButtonText = styled.h1``;
 
-export default function CompressorButtons({ onUpload, images }) {
+export default function CompressorButtons({ onUpload, images, compressedImages }) {
     
-    const [filesSelected, setFilesSelected] = useState(null);
+
+    const [renderStatus, setRenderStatus] = useState({ files: false, compressed: false });
+    const { files, compressed } = renderStatus;
     
     useEffect(() => {
-        images.length > 0 ? setFilesSelected(true) : setFilesSelected(false);
+        if (images.length > 0) {
+            setRenderStatus({ files: true, compressed: false });
+        } else {
+            setRenderStatus({ files: false, compressed: false });
+        }
     }, [images]);
 
+    useEffect(() => {
+        if (compressedImages.length > 0) {
+            setRenderStatus({ files: true, compressed: true });
+        }
+    }, [compressedImages]);
+
+    const ButtonRender =  files === false
+        ? (
+            <Button active={files} onClick={(e) => onUpload(e)}>
+                <ButtonText> Upload files above before compressing </ButtonText>
+            </Button>
+        )
+        : files === true && compressed === false
+        ? (
+            <Button active={files} onClick={(e) => onUpload(e)}>
+                <ButtonText> Click here to begin compression </ButtonText>
+            </Button>
+        )
+        : files === true && compressed === true
+        ? (
+            <Button active={files} onClick={(e) => onUpload(e)}>
+                <ButtonText> Download compressed files </ButtonText>
+            </Button>
+        )
+        : null;
     return (
         <Container>
-            <Button active={filesSelected} onClick={(e) => onUpload(e)}>
-                <ButtonText>
-                { filesSelected ? 'Click here to begin compression' : 'Upload files above before compressing' }
-                </ButtonText>
-            </Button>
+            {ButtonRender}
         </Container>
     );
 }

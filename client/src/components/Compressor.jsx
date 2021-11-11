@@ -19,6 +19,14 @@ const Container = styled.div`
 export default function Compressor() {
     const [images, setImages] = useState([]);
     const [errorMsg, setErrorMsg] = useState('');
+
+    const [compressedImages, setCompressedImages] = useState([]);
+
+    const buildImageRefs = (compressedImages) => {
+        const result = [];
+        compressedImages.forEach(({ link, key }) => result.push(key));
+        return result;
+    }
     
     function onImageChange(e) {
         if (e.target.files.length > 10) return setErrorMsg('You cant upload more than 10 files, please try again.');
@@ -36,7 +44,7 @@ export default function Compressor() {
         
         axios.post('/api/upload', form, {})
             .then(({ data }) => {
-                console.log(data);
+                setCompressedImages(data);
             })
             .catch(err => console.log(err));
     }
@@ -44,12 +52,18 @@ export default function Compressor() {
     function clearImages() {
         setImages([]);
         setErrorMsg('');
+        const imageRefs = buildImageRefs(compressedImages);
+        axios.post('/api/delete', { imageRefs })
+            .then(res => {
+                setCompressedImages([]);
+            })
+            .catch(err => console.log(err));
     }
 
     return (
         <Container>
             <CompressorUpload onImageChange={onImageChange} images={images} errorMsg={errorMsg} clearImages={clearImages} />
-            <CompressorButtons onUpload={onUpload} images={images} />
+            <CompressorButtons onUpload={onUpload} images={images} compressedImages={compressedImages} />
         </Container>
     );
 }
