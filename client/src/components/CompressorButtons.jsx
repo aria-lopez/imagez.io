@@ -65,6 +65,11 @@ export default function CompressorButtons({ onUpload, images, compressedImages }
         ? (
             <Button active={files} onClick={(e) => onUpload(e)}>
                 <ButtonText> Download compressed files </ButtonText>
+                <div style={{ display: 'none'}}>
+                    {
+                        compressedImages.map(({ link, key }) => <iframe src={link} />)
+                    }
+                </div>
             </Button>
         )
         : null;
