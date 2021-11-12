@@ -29,7 +29,7 @@ const Button = styled.div`
 
 const ButtonText = styled.h1``;
 
-export default function CompressorButtons({ onUpload, images, compressedImages }) {
+export default function CompressorButtons({ onUpload, images, compressedImages, clearImages }) {
     
 
     const [renderStatus, setRenderStatus] = useState({ files: false, compressed: false });
@@ -46,6 +46,7 @@ export default function CompressorButtons({ onUpload, images, compressedImages }
     useEffect(() => {
         if (compressedImages.length > 0) {
             setRenderStatus({ files: true, compressed: true });
+            setTimeout(() => clearImages(), 3000);
         }
     }, [compressedImages]);
 
@@ -63,8 +64,8 @@ export default function CompressorButtons({ onUpload, images, compressedImages }
         )
         : files === true && compressed === true
         ? (
-            <Button active={files} onClick={(e) => onUpload(e)}>
-                <ButtonText> Download compressed files </ButtonText>
+            <Button active={files}>
+                <ButtonText> Files downloading, please wait </ButtonText>
                 <div style={{ display: 'none'}}>
                     {
                         compressedImages.map(({ link, key }) => <iframe src={link} />)

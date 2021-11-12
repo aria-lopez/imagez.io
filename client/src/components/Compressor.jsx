@@ -3,6 +3,7 @@ import styled from 'styled-components';
 import axios from 'axios';
 import CompressorUpload from './CompressorUpload.jsx';
 import CompressorButtons from './CompressorButtons.jsx';
+import EditImagesModule from './EditImagesModule.jsx';
 
 const Container = styled.div`
     display: flex;
@@ -19,6 +20,8 @@ const Container = styled.div`
 export default function Compressor() {
     const [images, setImages] = useState([]);
     const [errorMsg, setErrorMsg] = useState('');
+
+    const [render, setRender] = useState('base');
 
     const [compressedImages, setCompressedImages] = useState([]);
 
@@ -60,10 +63,36 @@ export default function Compressor() {
             .catch(err => console.log(err));
     }
 
+    function handleImageEdits(keys) {
+        const newImages = [];
+        keys.forEach(index => newImages.push(images[index-1]));
+        setImages(newImages); 
+    }
+
     return (
         <Container>
-            <CompressorUpload onImageChange={onImageChange} images={images} errorMsg={errorMsg} clearImages={clearImages} />
-            <CompressorButtons onUpload={onUpload} images={images} compressedImages={compressedImages} />
+            { render === 'base' 
+                ?   (<><CompressorUpload 
+                        onImageChange={onImageChange} 
+                        images={images} 
+                        errorMsg={errorMsg} 
+                        clearImages={clearImages} 
+                        setRender={setRender}
+                    />
+            
+                    <CompressorButtons 
+                        onUpload={onUpload} 
+                        images={images} 
+                        compressedImages={compressedImages} 
+                        clearImages={clearImages} 
+                    /></>)
+                : render === 'edit-images'
+                ?   <EditImagesModule 
+                        handleImageEdits={handleImageEdits}
+                        images={images}
+                    />
+                : null
+            }
         </Container>
     );
 }

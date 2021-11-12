@@ -32,6 +32,12 @@ const Input = styled.input`
     opacity: 0;
 `;
 
+const Row = styled.div`
+    display: flex;
+    flex-direction: row;
+    min-width: 50%;
+`;
+
 const Text = styled.h1`
     position: absolute;
     right: 38%;
@@ -58,8 +64,8 @@ const Error = styled.h2`
     color: #f25c78;
 `;
 
-const ClearImagesBtn = styled.button`
-    background-color: #a3394d;
+const ImagesBtn = styled.button`
+    background-color: ${props => props.red ? '#a3394d' : '#e6ab0b'};
     transition-duration: 0.2s;
     color: inherit;
     font-family: inherit;
@@ -69,11 +75,11 @@ const ClearImagesBtn = styled.button`
     border: transparent;
     cursor: pointer;
     &:hover {
-        background-color: #f25c78;
+        background-color: ${props => props.red ? '#f25c78' : '#f7bb16' };
     }
 `;
 
-export default function CompressorUpload({ onImageChange, images, errorMsg, clearImages}) {
+export default function CompressorUpload({ onImageChange, images, errorMsg, clearImages, setRender}) {
     const [imagePreviews, setImagePreviews] = useState([]);
     const [displayImages, setDisplayImages] = useState(false);
 
@@ -111,7 +117,13 @@ export default function CompressorUpload({ onImageChange, images, errorMsg, clea
                     )
                 : UploadDisplay
             }
-            { displayImages ? <ClearImagesBtn onClick={() => clearImages()}>Clear Images</ClearImagesBtn> : null }
+            { displayImages 
+                    ? (
+                        <Row>
+                            <ImagesBtn red  onClick={() => clearImages()}>Clear Images</ImagesBtn> 
+                            <ImagesBtn onClick={() => setRender('edit-images')}> Edit Images</ImagesBtn>
+                        </Row>
+                    ) : null }
         </UploadContainer>
     );
 }
