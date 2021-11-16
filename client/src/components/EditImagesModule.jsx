@@ -32,11 +32,31 @@ const TitleRow = styled.div`
 
 
 export default function EditImagesModule({ imageLinks }) {
+    const [selectedImage, setSelectedImage] = useState(null);
+    
+    function handleClick(e, key) {
+        e.preventDefault();
+        setSelectedImage(imageLinks[key]);
+    }
+
+    const allImagesRender = 
+        (
+            <>
+                <TitleRow>Click an image to edit it</TitleRow>
+                { imageLinks.map((src, i) => <Image src={src} onClick={(e) => handleClick(e, i)}/>)}
+            </>
+        );
+
+    const selectedImageRender = 
+        (
+            <>
+                <img src={selectedImage} />
+            </>
+        );
 
     return (
         <Container>
-            <TitleRow>Click an image to edit it</TitleRow>
-            { imageLinks.map((src, i) => <Image src={src} />)}
+            { selectedImage ? selectedImageRender : allImagesRender }
         </Container>
     );
 }
