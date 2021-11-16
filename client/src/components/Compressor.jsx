@@ -19,7 +19,15 @@ const Container = styled.div`
 
 export default function Compressor() {
     const [images, setImages] = useState([]);
+    const [imageLinks, setImageLinks] = useState([]);
     const [errorMsg, setErrorMsg] = useState('');
+
+    useEffect(() => {
+        if (images.length === 0) return;
+        const newImageLinks = [];
+        images.forEach(image => newImageLinks.push(URL.createObjectURL(image)));
+        setImageLinks(newImageLinks);
+    }, [images]);
 
     const [render, setRender] = useState('base');
 
@@ -30,6 +38,7 @@ export default function Compressor() {
         compressedImages.forEach(({ link, key }) => result.push(key));
         return result;
     }
+
     
     function onImageChange(e) {
         if (e.target.files.length > 10) return setErrorMsg('You cant upload more than 10 files, please try again.');
@@ -89,7 +98,7 @@ export default function Compressor() {
                 : render === 'edit-images'
                 ?   <EditImagesModule 
                         handleImageEdits={handleImageEdits}
-                        images={images}
+                        imageLinks={imageLinks}
                     />
                 : null
             }
